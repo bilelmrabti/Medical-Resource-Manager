@@ -452,15 +452,15 @@ listeResource* gererPersonnel(listeResource *li) {
                 scanf("%s", gouvernorat);
                 int t = est_disponible(li, gouvernorat);
                 if (t == 1) {
-                    printf("Il y a une ressource disponible à %s\n", gouvernorat);
+                    printf("Il y a une ressource disponible a %s\n", gouvernorat);
                 } else {
-                    printf("Il n'y a pas de ressources disponibles à %s\n", gouvernorat);
+                    printf("Il n'y a pas de ressources disponibles a %s\n", gouvernorat);
                 }
                 break;
             }
             case 7: {
                 int id;
-                printf("Donner l'id de la ressource à modifier: ");
+                printf("Donner l'id de la ressource a modifier: ");
                 scanf("%d", &id);
                 modifierResource(li, id);
                 break;
