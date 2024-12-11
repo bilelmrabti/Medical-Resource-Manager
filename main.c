@@ -280,7 +280,7 @@ void supprimerLignesAvecMot(const char *nomFichier, const char *mot) {
 
     fichierSource = fopen(nomFichier, "r");
     if (fichierSource == NULL) {
-        printf("la liste est vide");
+
         return;
     }
 
@@ -369,13 +369,44 @@ void modifierResource(listeResource *li, int id) {
             printf("Donner la nouvelle localisation: ");
             scanf("%s", current->value.localisation);
             printf("\033[32mRessource modifiee avec succes.\033[0m\n");
+            NEW(id,current->value.nom_personnel,current->value.localisation);
             return;
         }
         current = current->next;
     }
     printf("\033[31mRessource avec l'ID %d non trouvee.\033[0m\n", id);
 }
+void NEW(int id ,char* nom,char* localisation){
+    FILE *fic = fopen("ressource.txt", "r");
+    char buffer[256];
+    char chaine[50];
+    char premierMot[50];
+    sprintf(chaine, "%d", id);
+    FILE *fichier = fopen ("temp.txt","w");
+    while (fgets(buffer, sizeof(buffer), fic)) {
+        strcpy(premierMot, strtok(buffer, " "));
+        if (strcmp(premierMot, chaine) == 0) {
+            int A, matricule;
+            char NOM[50], disponibilite[20], L[50];
+            fscanf(fic, "%d %49s %d %19s %49s", &A, NOM, &matricule, disponibilite, L);
+            fprintf(fichier,"%d %s %d %s %s",id,nom,matricule,disponibilite,localisation);
+        }
+        else{
+            fputs(buffer, fichier);
+        }
+    }
+    fclose(fic);
+    fclose(fichier);
 
+    if (remove("ressource.txt") != 0) {
+        printf("Erreur lors de la suppression du fichier source");
+        return;
+    }
+
+    if (rename("temp.txt","ressource.txt") != 0) {
+        printf("Erreur lors du renommage du fichier temporaire");
+    }
+}
 // Menu principal
 void menu() {
     printf("\033[1;32m ======================================\033[0m\n");
@@ -460,7 +491,7 @@ listeResource* gererPersonnel(listeResource *li) {
             }
             case 7: {
                 int id;
-                printf("Donner l'id de la ressource a modifier: ");
+                printf("Donner l'id de la ressource à modifier: ");
                 scanf("%d", &id);
                 modifierResource(li, id);
                 break;
